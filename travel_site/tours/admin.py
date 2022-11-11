@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from .models import Tour, Departure, Rating
+from django.db.models import Avg
+from .models import Tour, Departure, Rating, Destination
 
 
 @admin.register(Tour)
@@ -17,7 +18,6 @@ class TourAdmin(admin.ModelAdmin):
         return mark_safe(f'<img src={obj.image.url} width="100" height="110"')
 
     def show_average(self, obj):
-        from django.db.models import Avg
         result = Rating.objects.filter(tour=obj).aggregate(Avg("rating"))
         return result["rating__avg"]
 
@@ -36,3 +36,8 @@ class DepartureAdmin(admin.ModelAdmin):
 class RatingAdmin(admin.ModelAdmin):
     """Рейтинги"""
     list_display = ('rating', 'tour',)
+
+@admin.register(Destination)
+class DestinationAdmin(admin.ModelAdmin):
+    """Прибытия"""
+    list_display = ('name',)

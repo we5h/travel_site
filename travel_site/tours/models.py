@@ -1,15 +1,27 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
+
+class Destination(models.Model):
+    """Города прибытия"""
+    name = models.CharField(max_length=50 , verbose_name="Город прибытия")
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Прибытие"
+        verbose_name_plural = "Прибытия"
 
 class Departure(models.Model):
     """Города отправлений"""
     CITIES = [
-        ("msk", "Из Москвы"),
-        ("spb", "Из Петербурга"), 
-        ("nsk", "Из Новосибирска"),
-        ("ekb", "Из Екатеринбурга"),
-        ("kazan", "Из Казани"),
+        ("Из Москвы", "Из Москвы"),
+        ("Из Петербурга", "Из Петербурга"), 
+        ("Из Новосибирска", "Из Новосибирска"),
+        ("Из Екатеринбурга", "Из Екатеринбурга"),
+        ("Из Казани", "Из Казани"),
     ]
     name = models.CharField(max_length=50 ,choices=CITIES, verbose_name="Город отправления")
     slug = models.SlugField(max_length=130, unique=True, null=True)
@@ -30,20 +42,22 @@ class Departure(models.Model):
 class Tour(models.Model):
     """Туры"""
     STARS = [
-        ('OS', 1),
-        ('TWS', 2),
-        ('THRS', 3),
-        ('FOURS', 4),
-        ('FIVS', 5)
+        ('1', 1),
+        ('2', 2),
+        ('3', 3),
+        ('4', 4),
+        ('5', 5)
     ]
 
     title = models.CharField(max_length=155, verbose_name="Название")
     description = models.TextField(max_length=6000, verbose_name="Описание")
     slug = models.SlugField(max_length=130, unique=True, null=True)
     departure = models.ForeignKey(Departure, related_name='tours', on_delete = models.SET_NULL, null=True, verbose_name="Город отправления")
+    destination = models.ForeignKey(Destination, related_name='tours', on_delete = models.SET_NULL, null=True, verbose_name="Город прибытия")
     image = models.ImageField(upload_to='images/', blank=True, verbose_name="Изображение")
     price = models.PositiveIntegerField(verbose_name="Цена")
     stars = models.CharField(max_length=5, choices=STARS, default='OS', verbose_name="Кол-во звёзд")
+    nights = models.PositiveIntegerField(null=True, verbose_name="Кол-во ночей")
 
     def __str__(self) -> str:
         return self.title
@@ -52,6 +66,9 @@ class Tour(models.Model):
         if not self.id:
             self.slug = slugify(self.title)
         super(Tour, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):     
+        return reverse('tours:tour_detail', kwargs={'slug' : self.slug})
 
     class Meta:
         verbose_name = "Тур"

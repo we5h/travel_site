@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="display-3 mt-4" data-test="title">{{ tour.title }}  {{ tour.stars }} ★</h1>
+
+    <p class="lead" data-test="lead"><span data-test="country">{{ tour.destination.name }} </span><span data-text="departure">{{ tour.departure }}</span>
+        {% if tour.nights > 4 %} 
+        <span data-text="nights">{{ tour.nights }}</span> ночей</p>
+        {% elif 1 < tour.nights < 4 %}
+        <span data-text="nights">{{ tour.nights }}</span> ночи</p>
+        {% else %}
+        <span data-text="nights">{{ tour.nights }}</span> ночь</p>
+        {% endif %}
+    <img data-test="picture" src="{{ tour.image.url }}" class="w-75" alt="">
+    
+    <p class="my-4 w-75" data-test="description">{{ tour.description }}</p>
+
+    <a href="#" class="btn btn-success btn-lg open-popup" data-test="buybutton">Купить тур за <span data-test="price">{{ tour.price }}</span></a>
+{% endblock %}
