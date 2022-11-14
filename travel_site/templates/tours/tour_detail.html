@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+{% include "includes/_modal.html" %}
+
 <h1 class="display-3 mt-4" data-test="title">{{ tour.title }}  {{ tour.stars }} ★</h1>
 
     <p class="lead" data-test="lead"><span data-test="country">{{ tour.destination.name }} </span><span data-text="departure">{{ tour.departure }}</span>
@@ -15,5 +18,20 @@
     
     <p class="my-4 w-75" data-test="description">{{ tour.description }}</p>
 
-    <a href="#" class="btn btn-success btn-lg open-popup" data-test="buybutton">Купить тур за <span data-test="price">{{ tour.price }}</span></a>
+    <button id="buy-book" class="btn btn-primary" type="button" name="button">
+        Купить тур за 
+        <span data-test="price">{{ tour.price }}</span>
+    </button>
 {% endblock %}
+
+{% block extrascripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    
+        $("#buy-book").modalForm({
+            formURL: "{% url 'tours:buy_tour' %}"
+        });
+    
+    });
+    </script>
+{% endblock extrascripts %}

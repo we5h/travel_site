@@ -1,21 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>CSSDesk</title>
-    <style type="text/css">
-      body { background-color: #fff; }
-    </style>
-  </head>
-  <body>
-    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>IT Travel</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <!-- Boots for modal-forms -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+      <!-- Font awesome CSS -->
+    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
 </head>
 <body>
-
 <div class="container mt-3">
 
 {% include 'includes/nav.html'%}
@@ -27,7 +22,17 @@
 {% endblock %}
 </div>
 
+<!-- Scripts for modal-forms -->
+{% block scripts %}
+  <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+  <script src="{% static 'assets/js/popper.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+{% endblock scripts %}
+
+{% block extrascripts %}
+{% endblock extrascripts %}
+
 </body>
-</html>
-  </body>
+
 </html>

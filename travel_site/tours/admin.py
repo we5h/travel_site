@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.db.models import Avg
-from .models import Tour, Departure, Rating, Destination
+from .models import Tour, Departure, Rating, Destination, BuyTour
 
 
 @admin.register(Tour)
@@ -41,3 +41,9 @@ class RatingAdmin(admin.ModelAdmin):
 class DestinationAdmin(admin.ModelAdmin):
     """Прибытия"""
     list_display = ('name',)
+
+@admin.register(BuyTour)
+class BuyTourAdmin(admin.ModelAdmin):
+    """Заказы туров"""
+    list_display = ('name', 'email', 'phone', 'tour', 'time', )
+    fields = ('name', 'email', 'tour', 'phone',)

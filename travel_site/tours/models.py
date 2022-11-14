@@ -63,6 +63,7 @@ class Tour(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        """Автоматический слаг"""
         if not self.id:
             self.slug = slugify(self.title)
         super(Tour, self).save(*args, **kwargs)
@@ -86,3 +87,20 @@ class Rating(models.Model):
     class Meta:
         verbose_name = "Рейтинг"
         verbose_name_plural = "Рейтинги"
+
+
+class BuyTour(models.Model):
+    """Форма покупки тура"""
+    name = models.CharField(max_length=120, verbose_name="Имя")
+    email = models.EmailField(max_length=120, blank=True, null=True, verbose_name="Email")
+    phone = models.CharField(max_length=12, verbose_name="Номер телефона")
+    tour = models.ForeignKey(Tour, on_delete = models.SET_NULL, null=True, verbose_name="Выбранный тур")
+    time = models.DateTimeField(auto_now_add=True, verbose_name="Время оформления заказа")
+
+    def __str__(self) -> str:
+        return f'{self.name} - {self.phone}'
+    
+    class Meta:
+        verbose_name = "Заказ тура"
+        verbose_name_plural = "Заказы туров"
+        ordering = ['-time']

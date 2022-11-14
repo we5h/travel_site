@@ -1,8 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.urls import reverse_lazy
+from django.contrib import messages
 
-from . models import Tour
+from bootstrap_modal_forms.generic import BSModalCreateView
+
+from . models import Tour, BuyTour
+from . forms import BuyTourForm
 # Create your views here.
 
 
@@ -27,3 +32,17 @@ class TourDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['tour'] = get_object_or_404(Tour)
         return context
+
+
+class BuyTourView(BSModalCreateView):
+    """Покупка тура"""
+    template_name = 'modal_forms/buy_tour.html'
+    form_class = BuyTourForm
+    success_url = reverse_lazy('tours:index')
+
+    def form_valid(self, form):
+        """Success_message в этой библиотеке не работает, поэтому этот костыль спас нас"""
+        if not self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            messages.success(self.request, "Заказ принят.Менеджер свяжется с вами в ближайшее время.")
+
+        return super().form_valid(form)

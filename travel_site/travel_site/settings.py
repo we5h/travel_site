@@ -31,6 +31,7 @@ DISABLE_DARK_MODE = True
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap_modal_forms',
     'django_non_dark_admin',
     'django.contrib.admin',
     'django.contrib.auth',
