@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
@@ -27,10 +27,11 @@ class TourDetail(DetailView):
     """Выбран конкретный тур"""
     model = Tour
     template_name = 'tours/tour_detail.html'
+    slug_url_kwarg = 'slug'
     # context_object_name = 'tour'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tour'] = get_object_or_404(Tour)
+        context['tour'] = get_object_or_404(Tour , slug=self.kwargs.get("slug"))
         return context
 
 
@@ -39,6 +40,13 @@ class BuyTourView(BSModalCreateView):
     template_name = 'modal_forms/buy_tour.html'
     form_class = BuyTourForm
     success_url = reverse_lazy('tours:index')
+
+    def get_initial(self):
+        """Прокинули выбранный тур"""
+        tour = get_object_or_404(Tour, slug=self.kwargs.get('slug'))
+        return {
+            'tour':tour,
+        }
 
     def form_valid(self, form):
         """Success_message в этой библиотеке не работает, поэтому этот костыль спас нас"""

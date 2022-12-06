@@ -29,7 +29,7 @@
     $(document).ready(function() {
     
         $("#buy-book").modalForm({
-            formURL: "{% url 'tours:buy_tour' %}"
+            formURL: "{% url 'tours:buy_tour' tour.slug %}"
         });
     
     });
