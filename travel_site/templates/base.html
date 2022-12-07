@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
       <!-- Font awesome CSS -->
     <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/svoicss.css' %}">
 </head>
 <body>
 <div class="container mt-3">
@@ -34,5 +35,7 @@
 {% endblock extrascripts %}
 
 </body>
-
+<footer class="page-footer font-small border-top" >
+  {% include 'includes/footer.html' %}
+</footer>
 </html>

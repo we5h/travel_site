@@ -11,5 +11,5 @@ class BuyTourForm(BSModalModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'tour': forms.HiddenInput(attrs={'class': 'form-control'})
+            'tour': forms.Select(attrs={'class': 'form-control'})
         }

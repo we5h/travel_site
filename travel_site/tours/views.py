@@ -3,6 +3,9 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
 
 from bootstrap_modal_forms.generic import BSModalCreateView
 
@@ -14,12 +17,23 @@ from . forms import BuyTourForm
 class TourList(ListView):
     """Список туров на главной странице"""
     model = Tour
-    # paginate_by = 9  
+    paginate_by = 6  
     template_name = 'tours/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tours'] = Tour.objects.all()
+        tour_list = Tour.objects.all()
+        paginator = Paginator(tour_list, self.paginate_by)
+
+        page = self.request.GET.get('page')
+
+        try:
+            tours = paginator.page(page)
+        except PageNotAnInteger:
+            tours = paginator.page(1)
+        except EmptyPage:
+            tours = paginator.page(paginator.num_pages)
+        context['tours'] = tours
         return context
 
 
