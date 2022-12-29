@@ -58,6 +58,7 @@ class Tour(models.Model):
     price = models.PositiveIntegerField(verbose_name="Цена")
     stars = models.CharField(max_length=5, choices=STARS, default='OS', verbose_name="Кол-во звёзд")
     nights = models.PositiveIntegerField(null=True, verbose_name="Кол-во ночей")
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name="Время публикации тура")
 
     def __str__(self) -> str:
         return self.title
@@ -74,6 +75,7 @@ class Tour(models.Model):
     class Meta:
         verbose_name = "Тур"
         verbose_name_plural = "Туры"
+        ordering = ['-pub_date']
 
 
 class Rating(models.Model):
