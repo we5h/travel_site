@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav" data-test="navigation">
         {% for dep in departures %}
-        <li class="nav-item active">
+        <li class="nav-item {% if dep.slug in request.path %}active{% endif %}">
           <a class="nav-link" href="{% url 'tours:tour_dep' dep.slug %}" data-test="navlink">{{ dep.name }}</a>
         </li>
         {% endfor %}
