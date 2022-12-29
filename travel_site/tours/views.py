@@ -9,7 +9,7 @@ from django.core.paginator import PageNotAnInteger
 
 from bootstrap_modal_forms.generic import BSModalCreateView
 
-from . models import Tour, BuyTour
+from . models import Tour, BuyTour, Departure
 from . forms import BuyTourForm
 # Create your views here.
 
@@ -23,6 +23,7 @@ class TourList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         tour_list = Tour.objects.all()
+        dep_list = Departure.objects.all()
         paginator = Paginator(tour_list, self.paginate_by)
 
         page = self.request.GET.get('page')
@@ -34,8 +35,33 @@ class TourList(ListView):
         except EmptyPage:
             tours = paginator.page(paginator.num_pages)
         context['tours'] = tours
+        context['departures'] = dep_list
         return context
 
+
+class TourDepartureList(ListView):
+    """Список туров по отправлениям"""
+    model = Tour
+    paginate_by = 6  
+    template_name = 'tours/tours_departure.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tour_list = Tour.objects.filter(departure__slug=self.kwargs.get("slug"))
+        dep_list = Departure.objects.all()
+        paginator = Paginator(tour_list, self.paginate_by)
+
+        page = self.request.GET.get('page')
+
+        try:
+            tours = paginator.page(page)
+        except PageNotAnInteger:
+            tours = paginator.page(1)
+        except EmptyPage:
+            tours = paginator.page(paginator.num_pages)
+        context['tours'] = tours
+        context['departures'] = dep_list
+        return context
 
 class TourDetail(DetailView):
     """Выбран конкретный тур"""
