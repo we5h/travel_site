@@ -1,6 +1,8 @@
-from django import forms
-from .models import BuyTour
 from bootstrap_modal_forms.forms import BSModalModelForm
+from django import forms
+
+from .models import BuyTour
+
 
 class BuyTourForm(BSModalModelForm):
     """Форма покупки тура"""
