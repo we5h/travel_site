@@ -1,13 +1,13 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.urls import reverse_lazy
-from django.contrib import messages
-
 from bootstrap_modal_forms.generic import BSModalCreateView
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
-from . models import Tour, BuyTour, Departure
-from . forms import BuyTourForm
+from .forms import BuyTourForm
+from .models import Departure, Tour
+
 # Create your views here.
 
 
@@ -15,7 +15,7 @@ class TourList(ListView):
     """Список туров на главной странице"""
     model = Tour
     context_object_name = 'tours'
-    paginate_by = 6  
+    paginate_by = 6
     template_name = 'tours/index.html'
 
     def get_context_data(self, **kwargs):
@@ -29,7 +29,7 @@ class TourDepartureList(ListView):
     """Список туров по отправлениям"""
     model = Tour
     context_object_name = 'tours'
-    paginate_by = 6  
+    paginate_by = 6
     template_name = 'tours/tours_departure.html'
 
     def get_queryset(self):
@@ -43,6 +43,7 @@ class TourDepartureList(ListView):
         dep_list = Departure.objects.all()
         context['departures'] = dep_list
         return context
+
 
 class TourDetail(DetailView):
     """Выбран конкретный тур"""
@@ -67,12 +68,16 @@ class BuyTourView(BSModalCreateView):
         """Прокинули выбранный тур"""
         tour = get_object_or_404(Tour, slug=self.kwargs.get('slug'))
         return {
-            'tour':tour,
+            'tour': tour,
         }
 
     def form_valid(self, form):
-        """Success_message в этой библиотеке не работает, поэтому этот костыль спас нас"""
-        if not self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            messages.success(self.request, "Заказ принят.Менеджер свяжется с вами в ближайшее время.")
+        """
+        Success_message в этой библиотеке не работает,
+        поэтому этот костыль спас нас
+        """
+        if self.request.headers.get('x-requested-with') != 'XMLHttpRequest':
+            messages.success(self.request, "Заказ принят."
+                             "Менеджер свяжется с вами в ближайшее время.")
 
         return super().form_valid(form)
